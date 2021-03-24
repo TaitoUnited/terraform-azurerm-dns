@@ -31,7 +31,7 @@ resource "azurerm_private_dns_zone" "private" {
 resource "azurerm_dns_a_record" "a" {
   for_each            = {for item in local.aRecords: item.name => item}
   name                = split(".", each.value.dnsName)[0]
-  zone_name           = join(".", slice(split(".", each.value.dnsName), 1, -1))
+  zone_name           = join(".", slice(split(".", each.value.dnsName), 1, 100))  # TODO: endIndex
   resource_group_name = var.resource_group_name
   ttl                 = each.value.ttl
   records             = each.value.values
@@ -40,10 +40,10 @@ resource "azurerm_dns_a_record" "a" {
 resource "azurerm_dns_cname_record" "cname" {
   for_each            = {for item in local.cnameRecords: item.name => item}
   name                = split(".", each.value.dnsName)[0]
-  zone_name           = join(".", slice(split(".", each.value.dnsName), 1, -1))
+  zone_name           = join(".", slice(split(".", each.value.dnsName), 1, 100))  # TODO: endIndex
   resource_group_name = var.resource_group_name
   ttl                 = each.value.ttl
-  records             = each.value.values[0]
+  record              = each.value.values[0]
 }
 
 # TODO: Add support for other record types

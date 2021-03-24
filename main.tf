@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+provider "azurerm" {
+  features {}
+}
+
 locals {
   dnsZones = var.dns_zones != null ? var.dns_zones : []
 
